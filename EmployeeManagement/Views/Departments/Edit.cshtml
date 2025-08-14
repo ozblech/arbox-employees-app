@@ -1,0 +1,16 @@
+@model EmployeeManagement.Models.Department
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="@ViewData["Action"]" method="post" onsubmit="return confirm('Are you sure?');">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

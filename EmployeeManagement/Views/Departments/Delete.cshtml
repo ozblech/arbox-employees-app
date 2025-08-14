@@ -1,0 +1,10 @@
+@model EmployeeManagement.Models.Department
+
+<h1>Delete Department</h1>
+<p>Are you sure you want to delete "@Model.Name"?</p>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="/Departments" class="btn btn-secondary">Cancel</a>
+</form>

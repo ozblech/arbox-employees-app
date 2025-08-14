@@ -1,0 +1,33 @@
+@model List<EmployeeManagement.Models.Department>
+
+<p>
+    <a href="/Home" class="btn btn-primary">Back to Dashboard</a>
+</p>
+
+<h1>Departments</h1>
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+<p>
+    <a href="/Departments/Create" class="btn btn-primary">Add Department</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach(var d in Model) {
+<tr>
+    <td>@d.Name</td>
+    <td>
+        <a href="/Departments/Edit/@d.Id" class="btn btn-sm btn-warning">Edit</a>
+        <a href="/Departments/Delete/@d.Id" class="btn btn-sm btn-danger">Delete</a>
+    </td>
+</tr>
+}
+    </tbody>
+</table>

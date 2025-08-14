@@ -1,0 +1,66 @@
+﻿@model List<EmployeeManagement.Models.Employee>
+
+<h1>Dashboard</h1>
+
+<p>
+    <a href="/Employees" class="btn btn-primary">View All Employees</a>
+</p>
+<p>
+    <a href="/Departments" class="btn btn-primary">View All Departments</a>
+</p>
+
+<div class="mb-3">
+    <strong>Total Employees: </strong>@ViewBag.TotalEmployees
+</div>
+
+<h3>Employees by Department</h3>
+@if (ViewBag.GroupedByDept != null)
+{
+    <table class="table">
+        <thead>
+            <tr><th>Department</th><th>Count</th></tr>
+        </thead>
+        <tbody>
+        @foreach (var g in ViewBag.GroupedByDept)
+        {
+            <tr>
+                <td>@g.Department</td>
+                <td>@g.Count</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No employees found.</p>
+}
+
+<h3>Recent Hires (last 30 days)</h3>
+@if (ViewBag.RecentHires != null && ((List<EmployeeManagement.Models.Employee>)ViewBag.RecentHires).Any())
+{
+    <table class="table">
+        <thead>
+            <tr><th>Name</th><th>Department</th><th>Hire Date</th></tr>
+        </thead>
+        <tbody>
+        @foreach(var e in ViewBag.RecentHires)
+        {
+            <tr>
+                <td>@e.FirstName @e.LastName</td>
+                <td>@e.Department</td>
+                <td>@e.HireDate.ToShortDateString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No recent hires.</p>
+}
+
+<form method="get">
+    <input type="text" name="search" placeholder="Search employees..." class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Search</button>
+</form>

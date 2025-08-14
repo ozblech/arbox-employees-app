@@ -1,0 +1,39 @@
+@model List<EmployeeManagement.Models.Employee>
+
+<p>
+    <a href="/Home" class="btn btn-primary">Back to Dashboard</a>
+</p>
+
+<h1>Employees</h1>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add Employee</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSort"]">First Name</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSort"]">Last Name</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSort"]">Email</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["HireDateSort"]">Hire Date</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["SalarySort"]">Salary</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["DepartmentSort"]">Department</a></th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var e in Model) {
+    <tr>
+        <td>@e.FirstName</td>
+        <td>@e.LastName</td>
+        <td>@e.Email</td>
+        <td>@e.HireDate.ToShortDateString()</td>
+        <td>@e.Salary</td>
+        <td>@e.Department</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@e.Id" class="btn btn-sm btn-warning">Edit</a>
+            <a asp-action="Delete" asp-route-id="@e.Id" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+    </tr>
+}
+    </tbody>
+</table>
