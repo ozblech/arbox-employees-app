@@ -1,0 +1,9 @@
+// Ignore Logs folder
+/EmployeeManagement/Logs/
+// Ignore temporary files
+*.tmp
+// Ignore build directories
+/EmployeeManagement/bin/
+/EmployeeManagement/obj/
+
+
