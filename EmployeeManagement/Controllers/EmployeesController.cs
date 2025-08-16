@@ -1,20 +1,26 @@
 using EmployeeManagement.Models;
 using EmployeeManagement.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using EmployeeManagement.Data;
+ 
+
 
 namespace EmployeeManagement.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService _employeeService;
+        private readonly ApplicationDbContext _context;
 
-        public EmployeesController(IEmployeeService employeeService)
+        public EmployeesController(IEmployeeService employeeService, ApplicationDbContext context)
         {
             _employeeService = employeeService;
+             _context = context;
         }
 
         // GET: Employees
-        public IActionResult Index(string sortOrder)
+        public IActionResult Index(string sortOrder,string search)
         {
             ViewData["FirstNameSort"] = String.IsNullOrEmpty(sortOrder) ? "first_desc" : "";
             ViewData["LastNameSort"] = sortOrder == "last_asc" ? "last_desc" : "last_asc";
@@ -41,6 +47,17 @@ namespace EmployeeManagement.Controllers
                 _              => employees.OrderBy(e => e.FirstName).ToList()
             };
 
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+                employees = employees
+                    .Where(e =>
+                        (!string.IsNullOrEmpty(e.FirstName) && e.FirstName.ToLower().Contains(search)) ||
+                        (!string.IsNullOrEmpty(e.LastName) && e.LastName.ToLower().Contains(search)) ||
+                        (e.Department != null && !string.IsNullOrEmpty(e.Department.Name) && e.Department.Name.ToLower().Contains(search))
+                    );
+            }
+
             return View(employees);
         }
 
@@ -58,19 +75,22 @@ namespace EmployeeManagement.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
+            ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name");
             return View();
         }
 
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Employee employee)
+        public async Task<IActionResult> Create(Employee employee)
         {
             if (ModelState.IsValid)
             {
-                _employeeService.Add(employee);
+                _context.Add(employee);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
             return View(employee);
         }
 
@@ -82,24 +102,26 @@ namespace EmployeeManagement.Controllers
             {
                 return NotFound();
             }
+            // populate dropdown list
+            ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
             return View(employee);
         }
 
-        // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Employee employee)
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
-            if (id != employee.Id)
-            {
-                return BadRequest();
-            }
+            if (id != employee.Id) return BadRequest();
 
             if (ModelState.IsValid)
             {
                 _employeeService.Update(employee);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // re-populate dropdown if the model is invalid
+            ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
             return View(employee);
         }
 

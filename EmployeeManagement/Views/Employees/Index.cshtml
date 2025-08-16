@@ -28,7 +28,7 @@
         <td>@e.Email</td>
         <td>@e.HireDate.ToShortDateString()</td>
         <td>@e.Salary</td>
-        <td>@e.Department</td>
+        <td>@e.Department.Name</td>
         <td>
             <a asp-action="Edit" asp-route-id="@e.Id" class="btn btn-sm btn-warning">Edit</a>
             <a asp-action="Delete" asp-route-id="@e.Id" class="btn btn-sm btn-danger">Delete</a>

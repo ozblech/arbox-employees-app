@@ -1,46 +1,56 @@
 using EmployeeManagement.Models;
+using EmployeeManagement.Data;
 
 namespace EmployeeManagement.Services
 {
 
     public class DepartmentService : IDepartmentService
     {
-        private readonly List<Department> _departments;
+        private readonly ApplicationDbContext _context;
 
-        public DepartmentService()
+        public DepartmentService(ApplicationDbContext context)
         {
-            _departments = new List<Department>
-            {
-                new Department { Id = 1, Name = "HR" },
-                new Department { Id = 2, Name = "IT" },
-                new Department { Id = 3, Name = "Finance" }
-            };
+            _context = context;
         }
 
-        public List<Department> GetAll() => _departments;
+        public List<Department> GetAll()
+        {
+            return _context.Departments.ToList();
+        }
 
-        public Department? GetById(int id) => _departments.FirstOrDefault(d => d.Id == id);
+        public Department? GetById(int id)
+        {
+            return _context.Departments.Find(id);
+        }
 
         public void Add(Department department)
         {
-            department.Id = _departments.Any() ? _departments.Max(d => d.Id) + 1 : 1;
-            _departments.Add(department);
+            _context.Departments.Add(department);
+            _context.SaveChanges();
         }
 
         public void Update(Department department)
         {
-            var existing = GetById(department.Id);
-            if (existing != null) existing.Name = department.Name;
+            var existing = _context.Departments.Find(department.Id);
+            if (existing != null)
+            {
+                existing.Name = department.Name;
+                _context.SaveChanges();
+            }
         }
 
         // Prevent deletion if employees exist
         public bool Delete(int id, List<Employee> employees)
         {
-            if (employees.Any(e => e.Department == GetById(id)?.Name))
-                return false;
+            var hasEmployees = _context.Employees.Any(e => e.DepartmentId == id);
+            if (hasEmployees) return false;
 
             var dept = GetById(id);
-            if (dept != null) _departments.Remove(dept);
+            if (dept != null)
+            {
+                _context.Departments.Remove(dept);
+                _context.SaveChanges();
+            }
             return true;
         }
     }

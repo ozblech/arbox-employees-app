@@ -13,9 +13,9 @@ namespace EmployeeManagement.Services
         {
             _employees = new List<Employee>
             {
-                new Employee { Id = 1, FirstName = "Alice", LastName = "Johnson", Email = "alice@example.com", HireDate = DateTime.Now.AddYears(-3), Salary = 60000, Department = "HR" },
-                new Employee { Id = 2, FirstName = "Bob", LastName = "Smith", Email = "bob@example.com", HireDate = DateTime.Now.AddYears(-1), Salary = 80000, Department = "IT" },
-                new Employee { Id = 3, FirstName = "Charlie", LastName = "Brown", Email = "charlie@example.com", HireDate = DateTime.Now.AddMonths(-6), Salary = 50000, Department = "Finance" }
+                new Employee { Id = 1, FirstName = "Alice", LastName = "Johnson", Email = "alice@example.com", HireDate = DateTime.Now.AddYears(-3), Salary = 60000, Department = new Department { Id = 1, Name = "HR" } },
+                new Employee { Id = 2, FirstName = "Bob", LastName = "Smith", Email = "bob@example.com", HireDate = DateTime.Now.AddYears(-1), Salary = 80000, Department = new Department { Id = 2, Name = "IT" } },
+                new Employee { Id = 3, FirstName = "Charlie", LastName = "Brown", Email = "charlie@example.com", HireDate = DateTime.Now.AddMonths(-6), Salary = 50000, Department = new Department { Id = 3, Name = "Finance" } }
             };
         }
 

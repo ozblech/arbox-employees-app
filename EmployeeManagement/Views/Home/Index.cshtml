@@ -1,12 +1,12 @@
-﻿@model List<EmployeeManagement.Models.Employee>
+﻿@model EmployeeManagement.Models.DashboardViewModel
 
 <h1>Dashboard</h1>
 
 <p>
-    <a href="/Employees" class="btn btn-primary">View All Employees</a>
+    <a href="/Employees" class="btn btn-primary">Employees</a>
 </p>
 <p>
-    <a href="/Departments" class="btn btn-primary">View All Departments</a>
+    <a href="/Departments" class="btn btn-primary">Departments</a>
 </p>
 
 <div class="mb-3">
@@ -24,7 +24,7 @@
         @foreach (var g in ViewBag.GroupedByDept)
         {
             <tr>
-                <td>@g.Department</td>
+                <td>@g.Department.Name</td>
                 <td>@g.Count</td>
             </tr>
         }
@@ -48,7 +48,7 @@ else
         {
             <tr>
                 <td>@e.FirstName @e.LastName</td>
-                <td>@e.Department</td>
+                <td>@e.Department.Name</td>
                 <td>@e.HireDate.ToShortDateString()</td>
             </tr>
         }
@@ -60,7 +60,69 @@ else
     <p>No recent hires.</p>
 }
 
-<form method="get">
-    <input type="text" name="search" placeholder="Search employees..." class="form-control" />
+<form method="get" class="mb-3">
+    <input type="text" name="search" value="@Model.SearchTerm"
+           placeholder="Search employees or departments..." class="form-control" />
     <button type="submit" class="btn btn-primary mt-2">Search</button>
 </form>
+
+@if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+{
+    <h3>Filtered Employees</h3>
+    @if (Model.FilteredEmployees.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                    <th>Hire Date</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var e in Model.FilteredEmployees)
+            {
+                <tr>
+                    <td>@e.FirstName @e.LastName</td>
+                    <td>@e.Department?.Name</td>
+                    <td>@e.Email</td>
+                    <td>@e.HireDate.ToShortDateString()</td>
+                    <td>@e.Salary</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No employees found.</p>
+    }
+
+    <h3>Filtered Departments</h3>
+    @if (Model.FilteredDepartments.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Number of Employees</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var d in Model.FilteredDepartments)
+            {
+                <tr>
+                    <td>@d.Name</td>
+                    <td>@Model.Employees.Count(e => e.DepartmentId == d.Id)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No departments found.</p>
+    }
+}

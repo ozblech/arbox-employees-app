@@ -10,5 +10,7 @@ namespace EmployeeManagement.Models
         [Required(ErrorMessage = "Department name is required")]
         [MaxLength(50, ErrorMessage = "Department name cannot exceed 50 characters")]
         public string Name { get; set; } = string.Empty;
+
+        public ICollection<Employee>? Employees { get; set; }
     }
 }

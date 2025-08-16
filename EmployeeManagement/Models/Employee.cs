@@ -30,7 +30,10 @@ namespace EmployeeManagement.Models
         public decimal Salary { get; set; }
 
         [Required]
-        public string Department { get; set; } = string.Empty;
+        public int DepartmentId { get; set; }
+
+        // Navigation property
+        public Department? Department { get; set; }
 
         public static ValidationResult? ValidateHireDate(DateTime hireDate, ValidationContext context)
         {

@@ -6,11 +6,10 @@ namespace EmployeeManagement.Models
 {
     public class DashboardViewModel
     {
-        public int TotalEmployees { get; set; }
-
-        // Dictionary: department name -> list of employees
-        public Dictionary<string, List<Employee>> EmployeesByDepartment { get; set; } = new();
-
-        public List<Employee> RecentHires { get; set; } = new();
+        public List<Employee> Employees { get; set; }
+        public List<Employee> FilteredEmployees { get; set; }
+        public List<Department> Departments { get; set; }
+        public List<Department> FilteredDepartments { get; set; }
+        public string SearchTerm { get; set; } = "";
     }
 }

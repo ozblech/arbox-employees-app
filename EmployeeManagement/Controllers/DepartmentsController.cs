@@ -34,6 +34,10 @@ namespace EmployeeManagement.Controllers
         {
             var dept = _deptService.GetById(id);
             if (dept == null) return NotFound();
+
+            ViewData["Title"] = "Edit Department";
+            ViewData["Action"] = "Edit"; // matches the asp-action in the form
+            
             return View(dept);
         }
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement/EmployeeManagement.csproj": {}
+    "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement.csproj": {}
   },
   "projects": {
-    "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement/EmployeeManagement.csproj": {
+    "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement/EmployeeManagement.csproj",
+        "projectUniqueName": "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement.csproj",
         "projectName": "EmployeeManagement",
-        "projectPath": "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement/EmployeeManagement.csproj",
+        "projectPath": "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement.csproj",
         "packagesPath": "/home/oz/.nuget/packages/",
-        "outputPath": "/home/oz/work/arboxTask/EmployeeManagement/EmployeeManagement/obj/",
+        "outputPath": "/home/oz/work/arboxTask/EmployeeManagement/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/oz/.nuget/NuGet/NuGet.Config"
@@ -42,7 +42,7 @@
               "target": "Package",
               "version": "[8.0.8, )"
             },
-            "Microsoft.EntityFrameworkCore.InMemory": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.8, )"
             },
