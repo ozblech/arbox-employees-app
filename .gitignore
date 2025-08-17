@@ -10,4 +10,5 @@
 // ignore MyApp.Tests output
 /MyApp.Tests/bin/
 /MyApp.Tests/obj/
-
+// Ignore .env files
+.env

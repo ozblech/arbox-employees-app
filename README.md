@@ -132,8 +132,10 @@ CRUD for Employees & Departments
 
 Search functionality with * to show all
 
-🐳 Running the App in Docker
+🐳 Running the App in Docker (Create a network and connect the empsql container to it and then run the app container)
 ```bash
+docker network create empnet
+docker network connect empnet empsql
 docker run -d --name employees-app \
   --network empnet \
   -p 5000:8080 \
@@ -145,3 +147,15 @@ Access the app at http://localhost:5000
 
 Make sure the SQL Server container (empsql) is running and on the same Docker network empnet.
 
+## 🐳 Running with Docker Compose
+
+You can run both the SQL Server and Employee Management app using Docker Compose. This setup also allows you to define the SQL Server credentials once and reuse them.
+
+
+Create a file named .env in the same folder as your docker-compose.yml
+```env
+SA_USER=sa
+SA_PASSWORD=YourStrongPassw0rd
+```
+Run
+docker-compose up -d

@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  empsql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: empsql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "${SA_PASSWORD}"
+    ports:
+      - "1433:1433"
+    networks:
+      - empnet
+
+  employees-app:
+    image: ozblech/arbox-employees-app:latest
+    container_name: employees-app
+    ports:
+      - "5000:8080"
+    environment:
+      ConnectionStrings__EmployeeDb: "Server=empsql,1433;Database=EmployeesDb;User Id=sa;Password=${SA_PASSWORD};Encrypt=False;TrustServerCertificate=True;"
+    networks:
+      - empnet
+
+networks:
+  empnet:
+    driver: bridge
