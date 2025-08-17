@@ -13,7 +13,7 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 // SQL Server connection string
-var connectionString = "Server=localhost,1433;Database=EmployeeDB;User Id=sa;Password=YourStrongPassw0rd;TrustServerCertificate=True;";
+var connectionString = builder.Configuration.GetConnectionString("EmployeeDb");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -36,12 +36,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
 app.UseAuthorization();
 
 app.MapControllerRoute(
