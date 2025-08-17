@@ -36,39 +36,45 @@ It demonstrates best practices including CRUD operations, server-side validation
 ```bash
 git clone https://github.com/ozblech/arbox-employees-app.git
 cd arbox-employees-app
+```
 
-2. Configure Database
+### 2. Configure Database
 
 Update the connection string in appsettings.json or use environment variables:
 
+```bash
 "ConnectionStrings": {
   "EmployeeDb": "Server=localhost;Database=EmployeesDb;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;"
 }
+```
+
 
 Replace User Id and Password with your SQL Server credentials.
 
 If using Docker for SQL Server, run:
 
+```bash
 docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourPassword123" -p 1433:1433 --name empsql mcr.microsoft.com/mssql/server:2022-latest
-
-3. Apply Migrations
-
+```
+### 3. Apply Migrations
+```bash
 dotnet ef database update
-
+```
 This will create the necessary tables:
 
 Employees
 
 Departments
 
-4. Run the Application
-
+### 4. Run The Application
+```bash
 dotnet run
+```
 The app will be available at:
 👉 http://localhost:5000
 
 📂 Project Structure
-
+```pgsql
 EmployeeManagement/
 ├─ Controllers/
 │   ├─ EmployeesController.cs
@@ -90,18 +96,20 @@ EmployeeManagement/
 ├─ appsettings.json
 ├─ Program.cs
 ├─ Startup.cs
-
+```
 
 Global Exception Handling
 
 Unhandled exceptions are logged to JSON files in /Logs.
 
 Example log entry:
+```json
 {
   "Timestamp": "2025-08-16T12:34:56Z",
   "Message": "Object reference not set to an instance of an object.",
   "StackTrace": "at EmployeeManagement.Controllers.EmployeesController.Index() in /src/EmployeeManagement/Controllers/EmployeesController.cs:line 42"
 }
+```
 
 
 🧪 Testing the Exception Middleware
@@ -125,12 +133,13 @@ CRUD for Employees & Departments
 Search functionality with * to show all
 
 🐳 Running the App in Docker
+```bash
 docker run -d --name employees-app \
   --network empnet \
   -p 5000:8080 \
   -e "ConnectionStrings__EmployeeDb=Server=empsql,1433;Database=EmployeesDb;User Id=sa;Password=YourStrongPassw0rd;Encrypt=False;TrustServerCertificate=True;" \
   ozblech/arbox-employees-app:latest
-
+```
 
 Access the app at http://localhost:5000
 
