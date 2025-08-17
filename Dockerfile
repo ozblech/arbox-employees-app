@@ -2,11 +2,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY *.csproj ./
-RUN dotnet restore
+# Copy the project file and restore dependencies
+COPY EmployeeManagement/*.csproj ./EmployeeManagement/
+RUN dotnet restore ./EmployeeManagement/EmployeeManagement.csproj
 
-COPY . .
-RUN dotnet publish -c Release -o /app
+# Copy the rest of the source code
+COPY EmployeeManagement/. ./EmployeeManagement/
+
+# Publish the app
+RUN dotnet publish ./EmployeeManagement/EmployeeManagement.csproj -c Release -o /app
 
 # Stage 2 - Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
