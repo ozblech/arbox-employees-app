@@ -27,7 +27,7 @@ namespace EmployeeManagement.Services
 
         public void Add(Employee employee)
         {
-            employee.Id = _context.Employees.Max(e => e.Id) + 1;
+            //employee.Id = _context.Employees.Max(e => e.Id) + 1;
             _context.Employees.Update(employee);
             _context.SaveChanges();
         }
