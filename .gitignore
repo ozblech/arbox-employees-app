@@ -7,4 +7,7 @@
 /EmployeeManagement/obj/
 // Ignore wwwroot directory
 /EmployeeManagement/wwwroot/
+// ignore MyApp.Tests output
+/MyApp.Tests/bin/
+/MyApp.Tests/obj/
 

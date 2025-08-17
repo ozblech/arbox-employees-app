@@ -26,7 +26,7 @@ pgsql
 🛠️ Setup
 1. Clone the Repository
 bash
-git clone https://github.com/yourusername/employee-management.git
+git clone https://github.com/ozblech/arbox-employees-app.git
 cd employee-management
 2. Configure Database
 This project uses SQL Server.
