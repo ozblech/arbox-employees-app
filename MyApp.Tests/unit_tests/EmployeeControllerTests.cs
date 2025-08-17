@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace EmployeeManagement.Tests.Controllers
+namespace EmployeeManagement.Tests.Controllers.unit_tests
 {
     public class EmployeesControllerTests
     {

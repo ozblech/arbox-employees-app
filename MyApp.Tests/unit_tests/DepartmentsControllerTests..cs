@@ -7,7 +7,7 @@ using EmployeeManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using EmployeeManagement.Services;
 
-namespace EmployeeManagement.Tests.Controllers
+namespace EmployeeManagement.Tests.Controllers.unit_tests
 {
     public class DepartmentsControllerTests
     {

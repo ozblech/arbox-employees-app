@@ -6,14 +6,14 @@ using EmployeeManagement.Services;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EmployeeManagement.Tests.Services
+namespace EmployeeManagement.Tests.Services.unit_tests
 {
     public class DepartmentServiceTests
     {
         private ApplicationDbContext GetInMemoryDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: System.Guid.NewGuid().ToString())
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
             return new ApplicationDbContext(options);
         }

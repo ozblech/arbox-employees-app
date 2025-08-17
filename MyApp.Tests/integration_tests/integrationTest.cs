@@ -8,7 +8,7 @@ using EmployeeManagement.Data;
 using EmployeeManagement.Controllers;
 using Moq;
 
-namespace EmployeeManagement.Tests.Integration
+namespace EmployeeManagement.Tests.integration_tests
 {
     public class EmployeeControllerIntegrationTests
     {

@@ -6,7 +6,7 @@ using EmployeeManagement.Services;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace EmployeeManagement.Tests.Services
+namespace EmployeeManagement.Tests.Services.unit_tests
 {
     public class EmployeeServiceTests
     {
