@@ -38,7 +38,7 @@ jobs:
   # -----------------------
   integration-tests:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -55,7 +55,9 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       - name: Run integration tests
-        run: dotnet test --no-build --configuration Release --filter "Category=Integration" --logger "trx;LogFileName=IntegrationTests.trx"
+        run: dotnet test MyApp.Tests/MyApp.Tests.csproj --no-build --configuration Release --logger "trx;LogFileName=IntegrationTests.trx"
+
+
 
   # -----------------------
   # 3. Build & Push Docker Image when PR is approved (merge to master)
