@@ -75,6 +75,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: docker.io
 
       - name: Build Docker image
         run: docker build -t ozblech/arbox-employees-app:${{ github.sha }} .
