@@ -131,8 +131,9 @@ SQL DB with EF Core migrations
 CRUD for Employees & Departments
 
 Search functionality with * to show all
+## 🐳 Running with Docker
 
-🐳 Running the App in Docker (Create a network and connect the empsql container to it and then run the app container)
+(Create a network and connect the empsql container to it and then run the app container)
 ```bash
 docker network create empnet
 docker network connect empnet empsql
@@ -157,5 +158,5 @@ Create a file named .env in the same folder as your docker-compose.yml
 SA_USER=sa
 SA_PASSWORD=YourStrongPassw0rd
 ```
-Run
+Run:
 docker-compose up -d
