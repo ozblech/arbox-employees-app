@@ -77,9 +77,16 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: docker.io
 
-      - name: Build Docker image
-        run: docker build -t ozblech/arbox-employees-app:${{ github.sha }} .
+      - name: Build and Push Docker image
+        run: |
+          SHORT_SHA=${GITHUB_SHA::7}
+          echo "Using short SHA: $SHORT_SHA"
 
-      - name: Push Docker image
-        run: docker push ozblech/arbox-employees-app:${{ github.sha }}
+          # Build image with both tags
+          docker build -t ozblech/arbox-employees-app:latest -t ozblech/arbox-employees-app:$SHORT_SHA .
+
+          # Push both tags
+          docker push ozblech/arbox-employees-app:latest
+          docker push ozblech/arbox-employees-app:$SHORT_SHA
+
 
