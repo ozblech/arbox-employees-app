@@ -36,7 +36,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthorization();
+// UseAuthorization is not needed as there is no authentication
+// app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

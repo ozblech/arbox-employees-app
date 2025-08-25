@@ -17,3 +17,9 @@ Logs/
 
 # Ignore wwwroot directory
 /EmployeeManagement/wwwroot/
+
+# Ignore Logs directory
+/EmployeeManagement/Logs/
+
+# Ignore Migrations folder
+/EmployeeManagement/Migrations/

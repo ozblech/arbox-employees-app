@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using EmployeeManagement.Models;
 
 namespace EmployeeManagement.Services

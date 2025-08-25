@@ -1,6 +1,5 @@
 // Services/IDepartmentService.cs
 using EmployeeManagement.Models;
-using System.Collections.Generic;
 
 namespace EmployeeManagement.Services
 {

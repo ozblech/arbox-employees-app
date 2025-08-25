@@ -1,0 +1,3 @@
+Create the MVC project structure
+From your project root (where your Dockerfile will live): Run:
+dotnet new mvc -n EmployeeManagement

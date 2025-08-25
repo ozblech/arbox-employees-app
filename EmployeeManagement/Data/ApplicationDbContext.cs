@@ -10,17 +10,6 @@ namespace EmployeeManagement.Data
 
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Department> Departments { get; set; } = null!;
-
-        // protected override void OnModelCreating(ModelBuilder modelBuilder)
-        // {
-        //     base.OnModelCreating(modelBuilder);
-
-        //     modelBuilder.Entity<Department>().HasData(
-        //         new Department { Name = "HR" },
-        //         new Department { Name = "IT" },
-        //         new Department { Name = "Finance" }
-        //     );
-        // }
     }
 }
 

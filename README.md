@@ -54,10 +54,11 @@ Replace User Id and Password with your SQL Server credentials.
 If using Docker for SQL Server, run:
 
 ```bash
-docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourPassword123" -p 1433:1433 --name empsql mcr.microsoft.com/mssql/server:2022-latest
+docker run -d -e "ACCEPT_EULA=Y" -e "SA_USER=sa" -e "SA_PASSWORD=YourStrongPassw0rd" -p 1433:1433 --name empsql mcr.microsoft.com/mssql/server:2022-latest
 ```
 ### 3. Apply Migrations
 ```bash
+dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
 This will create the necessary tables:
@@ -68,7 +69,7 @@ Departments
 
 ### 4. Run The Application
 ```bash
-dotnet run
+dotnet run --urls=http://localhost:5000/
 ```
 The app will be available at:
 👉 http://localhost:5000
@@ -160,3 +161,166 @@ SA_PASSWORD=YourStrongPassw0rd
 ```
 Run:
 docker-compose up -d
+
+
+Program.cs:
+```csharp
+using EmployeeManagement.Services;
+using EmployeeManagement.Data;
+using Microsoft.EntityFrameworkCore;
+using EmployeeManagement.Middlewares;
+```
+
+* using ...; → allows you to reference classes in these namespaces without writing the full path.
+
+* Services → your custom business logic (e.g., EmployeeService).
+
+* Data → your EF Core DbContext and database setup.
+
+* Microsoft.EntityFrameworkCore → official Entity Framework Core library for database access.
+
+* Middlewares → your custom middleware classes (e.g., exception handling).
+
+App Builder
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+```
+* Creates a builder object that sets up:
+
+  * Configuration (reads appsettings.json, env variables, secrets).
+
+  * Logging.
+
+  * Dependency injection container.
+
+* args comes from command-line parameters when you run the app.
+
+Register Services
+```csharp
+builder.Services.AddControllersWithViews();
+```
+* Registers support for MVC Controllers + Razor Views in the DI container.
+
+* Without this, controllers and views won’t work.
+
+
+Dependency Injection – Business Services
+```csharp
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+```
+* Adds your custom services into the DI container.
+
+* Scoped lifetime = one instance per HTTP request.
+
+* Whenever a controller asks for IEmployeeService, the framework injects an EmployeeService object.
+
+👉 This is the Dependency Injection (DI) pattern – makes your code more testable and maintainable.
+
+Database Configuration
+```csharp
+var connectionString = builder.Configuration.GetConnectionString("EmployeeDb");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
+```
+
+* Reads the connection string from appsettings.json (EmployeeDb).
+
+* Registers ApplicationDbContext with DI so it can be injected into controllers/services.
+
+* Tells EF Core to use SQL Server as the database provider.
+
+So now, anywhere in your app, you can inject ApplicationDbContext and query the database.
+
+Build App
+```csharp
+var app = builder.Build();
+```
+* Finalizes the configuration and creates the application object (WebApplication).
+
+* After this point, you configure middleware and request pipeline.
+
+Global Exception Middleware
+```csharp
+app.UseMiddleware<GlobalExceptionMiddleware>();
+```
+* Adds your custom middleware into the request pipeline.
+
+* Handles unhandled exceptions globally (e.g., logging, returning friendly error response).
+
+* This runs before controllers.
+
+Ensure Database Exists
+```csharp
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.EnsureCreated();
+}
+```
+* Creates a scope to resolve services (because ApplicationDbContext is scoped).
+
+* Gets the ApplicationDbContext.
+
+* Calls EnsureCreated() → creates the database if it doesn’t already exist.
+
+⚠️ In production, you’d usually use migrations instead of EnsureCreated().
+
+Error Handling (Production Only)
+```csharp
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+}
+```
+* Checks environment (Development / Production).
+
+* In Production, sets up an error handler page (/Home/Error) instead of showing stack traces to users.
+
+Static Files
+```csharp
+app.UseStaticFiles();
+```
+* Serves static files from wwwroot folder (CSS, JS, images, etc.).
+
+Routing
+```csharp
+app.UseRouting();
+```
+
+* Enables the endpoint routing system.
+
+* Prepares the app to match incoming requests to routes defined later.
+
+Authorization
+```csharp
+app.UseAuthorization();
+```
+
+* Applies authorization rules (e.g., [Authorize] attributes on controllers).
+
+* If you also had app.UseAuthentication(), it would validate user identity first.
+
+Controller Route Mapping
+```csharp
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+```
+
+* Defines the default route pattern for MVC:
+
+  * /ControllerName/ActionName/Id
+
+  * Example: /Employee/Details/3 → calls EmployeeController.Details(3).
+
+* If no controller/action is given, it defaults to HomeController.Index.
+
+Run the App
+```csharp
+app.Run();
+```
+
+* Starts the Kestrel web server.
+
+* The app is now listening for HTTP requests on the configured port.

@@ -1,14 +1,17 @@
-// Ignore Logs folder
+# Ignore Logs folder
 /EmployeeManagement/Logs/
-// Ignore temporary files
+# Ignore temporary files
 *.tmp
-// Ignore build directories
+# Ignore build directories
 /EmployeeManagement/bin/
 /EmployeeManagement/obj/
-// Ignore wwwroot directory
+# Ignore wwwroot directory
 /EmployeeManagement/wwwroot/
-// ignore MyApp.Tests output
+# ignore MyApp.Tests output
 /MyApp.Tests/bin/
 /MyApp.Tests/obj/
-// Ignore .env files
+# Ignore .env files
 .env
+# Ignore Migrations folder
+/EmployeeManagement/Migrations/
+

@@ -81,7 +81,8 @@ namespace EmployeeManagement.Tests.Controllers.unit_tests
 
             foreach (var validation in validationResults)
             {
-                _controller.ModelState.AddModelError(validation.MemberNames.First(), validation.ErrorMessage);
+                var errorMessage = validation.ErrorMessage ?? "Validation error";
+                _controller.ModelState.AddModelError(validation.MemberNames.First(), errorMessage);
             }
 
             // Act
