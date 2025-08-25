@@ -22,6 +22,7 @@ var app = builder.Build();
 // Add custom global exception middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

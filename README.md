@@ -223,6 +223,12 @@ var connectionString = builder.Configuration.GetConnectionString("EmployeeDb");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 ```
+Registers ApplicationDbContext in the Dependency Injection container 
+with SQL Server provider and the connection string
+By default, it uses Scoped lifetime → one DbContext per HTTP request 
+That makes sense because:
+* A single HTTP request might touch multiple controllers/services, but they all share the same DbContext instance.
+* When the request ends, the DbContext is disposed.
 
 * Reads the connection string from appsettings.json (EmployeeDb).
 
@@ -244,11 +250,21 @@ Global Exception Middleware
 ```csharp
 app.UseMiddleware<GlobalExceptionMiddleware>();
 ```
-* Adds your custom middleware into the request pipeline.
+* UseMiddleware<T>() adds a custom middleware to the ASP.NET Core request pipeline.
+
+* Middleware is code that runs on every HTTP request before it reaches a controller and after the response comes back.
+
+* GlobalExceptionMiddleware is your custom middleware class that handles exceptions globally.
+
+* Basically, it catches any unhandled exception anywhere in your application and allows you to:
+
+  * Log the error
+
+  * Return a friendly error message or JSON
+
+  * Avoid the server crashing or returning stack traces to users
 
 * Handles unhandled exceptions globally (e.g., logging, returning friendly error response).
-
-* This runs before controllers.
 
 Ensure Database Exists
 ```csharp

@@ -16,11 +16,11 @@ namespace EmployeeManagement.Controllers
         public EmployeesController(IEmployeeService employeeService, ApplicationDbContext context)
         {
             _employeeService = employeeService;
-             _context = context;
+            _context = context;
         }
 
         // GET: Employees
-        public IActionResult Index(string sortOrder,string search)
+        public IActionResult Index(string sortOrder, string search)
         {
             ViewData["FirstNameSort"] = String.IsNullOrEmpty(sortOrder) ? "first_desc" : "";
             ViewData["LastNameSort"] = sortOrder == "last_asc" ? "last_desc" : "last_asc";
@@ -33,18 +33,18 @@ namespace EmployeeManagement.Controllers
 
             employees = sortOrder switch
             {
-                "first_desc"   => employees.OrderByDescending(e => e.FirstName).ToList(),
-                "last_asc"     => employees.OrderBy(e => e.LastName).ToList(),
-                "last_desc"    => employees.OrderByDescending(e => e.LastName).ToList(),
-                "email_asc"    => employees.OrderBy(e => e.Email).ToList(),
-                "email_desc"   => employees.OrderByDescending(e => e.Email).ToList(),
-                "hiredate_asc" => employees.OrderBy(e => e.HireDate).ToList(),
-                "hiredate_desc"=> employees.OrderByDescending(e => e.HireDate).ToList(),
-                "salary_asc"   => employees.OrderBy(e => e.Salary).ToList(),
-                "salary_desc"  => employees.OrderByDescending(e => e.Salary).ToList(),
-                "dept_asc"     => employees.OrderBy(e => e.Department).ToList(),
-                "dept_desc"    => employees.OrderByDescending(e => e.Department).ToList(),
-                _              => employees.OrderBy(e => e.FirstName).ToList()
+                "first_desc"    => employees.OrderByDescending(e => e.FirstName).ToList(),
+                "last_asc"      => employees.OrderBy(e => e.LastName).ToList(),
+                "last_desc"     => employees.OrderByDescending(e => e.LastName).ToList(),
+                "email_asc"     => employees.OrderBy(e => e.Email).ToList(),
+                "email_desc"    => employees.OrderByDescending(e => e.Email).ToList(),
+                "hiredate_asc"  => employees.OrderBy(e => e.HireDate).ToList(),
+                "hiredate_desc" => employees.OrderByDescending(e => e.HireDate).ToList(),
+                "salary_asc"    => employees.OrderBy(e => e.Salary).ToList(),
+                "salary_desc"   => employees.OrderByDescending(e => e.Salary).ToList(),
+                "dept_asc"      => employees.OrderBy(e => e.Department).ToList(),
+                "dept_desc"     => employees.OrderByDescending(e => e.Department).ToList(),
+                _               => employees.OrderBy(e => e.FirstName).ToList()
             };
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -140,6 +140,14 @@ namespace EmployeeManagement.Controllers
         {
             _employeeService.Delete(id);
             return RedirectToAction(nameof(Index));
+        }
+        
+        public IActionResult TestException()
+        {
+            // This will throw a divide by zero exception
+            int x = 0;
+            int y = 5 / x;
+            return Content("You won't see this");
         }
     }
 }
