@@ -26,14 +26,8 @@ namespace EmployeeManagement.Controllers
             ViewBag.TotalEmployees = allEmployees.Count();
 
             // Apply optional search
-            var filteredEmployees = allEmployees
-                .Where(e => !string.IsNullOrEmpty(e.FirstName) &&
-                            e.FirstName.Contains(search, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-            var filteredDepartments = allDepartments
-                .Where(d => !string.IsNullOrEmpty(d.Name) &&
-                            d.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            var filteredEmployees = new List<Employee>();
+            var filteredDepartments = new List<Department>();
             // Filter employees by search term
             if (string.IsNullOrWhiteSpace(search) || search.Trim() == "*")
             {
