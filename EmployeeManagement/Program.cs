@@ -33,8 +33,8 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    // db.Database.EnsureCreated(); // creates DB + tables if they don't exist ⚠️ This bypasses migrations → used for quick demos, not production.
-    db.Database.Migrate(); 
+    db.Database.EnsureCreated(); // creates DB + tables if they don't exist ⚠️ This bypasses migrations → used for quick demos, not production.
+    //db.Database.Migrate(); 
 }
 
 // Configure middleware
