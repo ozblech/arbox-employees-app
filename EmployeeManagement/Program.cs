@@ -36,7 +36,6 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated(); // creates DB + tables if they don't exist ⚠️ This bypasses migrations → used for quick demos, not production.
 }
 
-Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
 // Configure middleware
 // if (!app.Environment.IsDevelopment())
 // {

@@ -1,9 +1,9 @@
 @model Department
 
-<h1>Delete Department</h1>
+<h1>@ViewData["Title"]</h1>
 <p>Are you sure you want to delete "@Model.Name"?</p>
 
-<form asp-action="Delete" method="post">
+<form asp-action="@ViewData["Action"]" method="post">
     <input type="hidden" asp-for="Id" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a href="/Departments" class="btn btn-secondary">Cancel</a>

@@ -1,9 +1,9 @@
 # Ignore build outputs
-bin/
-obj/
+EmployeeManagement/bin/
+EmployeeManagement/obj/
 
 # Ignore logs
-Logs/
+EmployeeManagement/Logs/
 
 # Ignore user-specific files
 *.user

@@ -66,8 +66,10 @@ namespace EmployeeManagement.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
+            ViewData["Title"] = "Create Employee";
+            ViewData["Action"] = "Create";
             ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name");
-            return View();
+            return View("EmployeeForm", new Employee());
         }
 
         // POST: Employees/Create
@@ -75,14 +77,21 @@ namespace EmployeeManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Employee employee)
         {
+            // ModelState is a property of the Controller class, 
+            // It stores the state of model binding and validation
+            // * Whether binding values from the request to your model succeeded.
+            // * Whether validation rules (like [Required], [EmailAddress], [Range]) passed or failed.
+            // It maps property names to validation errors.
             if (ModelState.IsValid)
             {
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Title"] = "Create Employee";
+            ViewData["Action"] = "Create";
             ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
-            return View(employee);
+            return View("EmployeeForm",employee);
         }
 
         // GET: Employees/Edit/5
@@ -93,9 +102,11 @@ namespace EmployeeManagement.Controllers
             {
                 return NotFound();
             }
+            ViewData["Title"] = "Edit Employee";
+            ViewData["Action"] = "Edit";
             // populate dropdown list
             ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
-            return View(employee);
+            return View("EmployeeForm",employee);
         }
 
         [HttpPost]
@@ -110,10 +121,12 @@ namespace EmployeeManagement.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Title"] = "Edit Employee";
+            ViewData["Action"] = "Edit";
 
             // re-populate dropdown if the model is invalid
             ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
-            return View(employee);
+            return View("EmployeeForm", employee);
         }
 
         // GET: Employees/Delete/5

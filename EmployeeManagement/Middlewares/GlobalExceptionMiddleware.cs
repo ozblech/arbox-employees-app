@@ -60,7 +60,7 @@ namespace EmployeeManagement.Middlewares
                 await context.Response.WriteAsync(@"
                     <html>
                         <body>
-                            <h1>Something went wrong!</h1>
+                            <h1>Something went wrong! (Development)</h1>
                             <p>Our team has been notified.</p>
                             <p>Exception message: " + exception.Message + @"</p>
                             <a href='/'>Go back to Home</a>

@@ -27,7 +27,10 @@ namespace EmployeeManagement.Controllers
                 var success = _deptService.Add(department);
                 if (!success)
                 {
+                    // Department service returns false if a dept with same name exists
                     ModelState.AddModelError("Name", "Department with this name already exists.");
+                    // When you call View() without specifying a view name,
+                    // ASP.NET Core MVC assumes the view has the same name as the action
                     return View(department);
                 }
                 return RedirectToAction(nameof(Index));
@@ -62,6 +65,8 @@ namespace EmployeeManagement.Controllers
         {
             var dept = _deptService.GetById(id);
             if (dept == null) return NotFound();
+            ViewData["Title"] = "Delete Department";
+            ViewData["Action"] = "Delete"; // matches the asp-action in the form
             return View(dept);
         }
 
