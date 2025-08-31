@@ -25,8 +25,11 @@ namespace EmployeeManagement.Services
 
         public void Add(Employee employee)
         {
-            //employee.Id = _context.Employees.Max(e => e.Id) + 1;
             _context.Employees.Update(employee);
+            // When you call SaveChanges(), EF Core checks if employee.Id is 0 (default int value).
+            // Since it’s 0, EF knows this is a new entity → INSERT into database.
+            // SQL Server generates the next Id value automatically.
+            // EF Core then updates the employee.Id property with the generated value.
             _context.SaveChanges();
         }
 

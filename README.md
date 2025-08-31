@@ -44,7 +44,7 @@ Update the connection string in appsettings.json or use environment variables:
 
 ```bash
 "ConnectionStrings": {
-  "EmployeeDb": "Server=localhost;Database=EmployeesDb;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;"
+  "EmployeeDb": "Server=localhost;Database=EmployeesDb;User Id=sa;Password=YourStrongPassw0rd;TrustServerCertificate=True;"
 }
 ```
 
@@ -61,6 +61,9 @@ docker run -d -e "ACCEPT_EULA=Y" -e "SA_USER=sa" -e "SA_PASSWORD=YourStrongPassw
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
+ef migrations add InitialCreate - Creates Migrations/20250828123456_InitialCreate.cs.
+ef database update - Applies migration → Database now has Employees and Departments tables with seed data.
+
 This will create the necessary tables:
 
 Employees
@@ -340,3 +343,73 @@ app.Run();
 * Starts the Kestrel web server.
 
 * The app is now listening for HTTP requests on the configured port.
+
+-----------------------------------------------------------------------------------------------------------------
+## DataBase:
+
+EF Core looks at your classes (usually those with DbSet<T> in the DbContext) and maps them to database tables.
+in ApplicationDbContext.cs:
+```csharp
+public DbSet<Employee> Employees { get; set; } = null!;
+public DbSet<Department> Departments { get; set; } = null!;
+```
+This is the bridge between your C# classes and the SQL Server database.
+
+* DbSet<Employee> → tells EF Core: "Create and manage a table for employees."
+
+* DbSet<Department> → tells EF Core: "Create and manage a table for departments."
+
+Connection to Database (appsettings.json)
+```json
+"ConnectionStrings": {
+  "EmployeeDb": "Server=localhost,1433;Database=EmployeeDB;User Id=sa;Password=YourStrongPassw0rd;TrustServerCertificate=True;"
+}
+```
+This tells EF Core:
+👉 “Use SQL Server running on localhost, port 1433, with the database name EmployeeDB.”
+
+In Program.cs you probably have something like:
+```csharp
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeDb")));
+```
+
+# Migration & Database Creation
+in Program.cs:
+```csharp
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.EnsureCreated(); // creates DB + tables if they don't exist
+}
+```
+This makes EF Core directly create the schema from your models without migrations.
+
+Or You can use Migrations (Recommended for real projects)
+```bash
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
+* Migration files describe the SQL needed to build/update the schema.
+
+* EF Core translates your C# models into SQL CREATE TABLE statements (In Migrations folder).
+
+# Relationships
+* In your models:
+
+  * Employee has a DepartmentId (FK) + Department (navigation property).
+
+  * Department has ICollection<Employee> (one-to-many relationship).
+
+* EF Core sees this and creates a foreign key constraint in the DB:
+
+  * Employees.DepartmentId → references → Departments.Id
+
+So SQL Server enforces that every Employee belongs to a valid Department.
+
+# Install EF Core SQL Server Provider
+```bash
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+```

@@ -1,11 +1,12 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace EmployeeManagement.Models
 {
     public class Employee
     {
+        // By convention, EF Core treats a property named Id (or [ClassName]Id) as the primary key.
+        // Since it’s an int and you don’t manually set it, EF Core configures it as IDENTITY in SQL Server.
+        // SQL Server automatically assigns a unique, incrementing value for each new row.
         public int Id { get; set; }
 
         [Required]

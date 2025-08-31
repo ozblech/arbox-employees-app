@@ -115,7 +115,7 @@ namespace EmployeeManagement.Tests.Controllers.unit_tests
             });
 
             // Act
-            var result = _controller.Index(null, null);
+            var result = _controller.Index(string.Empty);
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);

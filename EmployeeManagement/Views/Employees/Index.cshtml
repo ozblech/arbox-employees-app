@@ -23,7 +23,9 @@
     <tbody>
 @foreach (var e in Model) {
     <tr>
-        <td>@e.FirstName</td>
+        <td>
+            <a asp-action="Details" asp-route-id="@e.Id">@e.FirstName</a>
+        </td>
         <td>@e.LastName</td>
         <td>@e.Email</td>
         <td>@e.HireDate.ToShortDateString()</td>

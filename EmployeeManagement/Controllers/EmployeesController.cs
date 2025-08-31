@@ -20,9 +20,11 @@ namespace EmployeeManagement.Controllers
         }
 
         // GET: Employees
-        public IActionResult Index(string sortOrder, string search)
+        public IActionResult Index(string sortOrder)
         {
-            ViewData["FirstNameSort"] = String.IsNullOrEmpty(sortOrder) ? "first_desc" : "";
+            // ViewData is a dictionary that passes extra info from controller to view.
+            // Here it stores the next sort direction for each column in the table.
+            ViewData["FirstNameSort"] = string.IsNullOrEmpty(sortOrder) ? "first_desc" : "";
             ViewData["LastNameSort"] = sortOrder == "last_asc" ? "last_desc" : "last_asc";
             ViewData["EmailSort"] = sortOrder == "email_asc" ? "email_desc" : "email_asc";
             ViewData["HireDateSort"] = sortOrder == "hiredate_asc" ? "hiredate_desc" : "hiredate_asc";
@@ -42,21 +44,10 @@ namespace EmployeeManagement.Controllers
                 "hiredate_desc" => employees.OrderByDescending(e => e.HireDate).ToList(),
                 "salary_asc"    => employees.OrderBy(e => e.Salary).ToList(),
                 "salary_desc"   => employees.OrderByDescending(e => e.Salary).ToList(),
-                "dept_asc"      => employees.OrderBy(e => e.Department).ToList(),
-                "dept_desc"     => employees.OrderByDescending(e => e.Department).ToList(),
+                "dept_asc"      => employees.OrderBy(e => e.Department != null ? e.Department.Name : string.Empty).ToList(),
+                "dept_desc"     => employees.OrderByDescending(e => e.Department != null ? e.Department.Name : string.Empty).ToList(),
                 _               => employees.OrderBy(e => e.FirstName).ToList()
             };
-
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                search = search.ToLower();
-                employees = employees
-                    .Where(e =>
-                        (!string.IsNullOrEmpty(e.FirstName) && e.FirstName.ToLower().Contains(search)) ||
-                        (!string.IsNullOrEmpty(e.LastName) && e.LastName.ToLower().Contains(search)) ||
-                        (e.Department != null && !string.IsNullOrEmpty(e.Department.Name) && e.Department.Name.ToLower().Contains(search))
-                    );
-            }
 
             return View(employees);
         }
@@ -134,7 +125,9 @@ namespace EmployeeManagement.Controllers
         }
 
         // POST: Employees/DeleteConfirmed/5
-        [HttpPost, ActionName("DeleteConfirmed")]
+        // C# sees them as different methods: Delete vs DeleteConfirmed.
+        // MVC routing sees both as Delete because of [ActionName("Delete")].
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
@@ -142,7 +135,7 @@ namespace EmployeeManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
         
-        public IActionResult TestException()
+        public IActionResult TestDevideByZeroException()
         {
             // This will throw a divide by zero exception
             int x = 0;

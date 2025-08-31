@@ -1,4 +1,4 @@
-@model EmployeeManagement.Models.Employee
+@model Employee
 
 @{
     ViewData["Title"] = "Edit Employee";
@@ -6,12 +6,18 @@
 
 <h1>Edit Employee</h1>
 
+@* The <form asp-action="Edit" method="post"> tells ASP.NET Core to make a POST request 
+to the Edit action of the current controller (EmployeesController).
+All inputs inside the form (like FirstName, LastName, Email, etc.) are sent as form data in the POST request.
+The <input type="hidden" asp-for="Id" /> ensures the employee's ID is sent so the server knows which record to update. *@
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
 
     <div class="form-group">
+        @* asp-for="FirstName" binds the input to the Employee.FirstName property. *@
         <label asp-for="FirstName" class="control-label"></label>
         <input asp-for="FirstName" class="form-control" />
+        @* asp-validation-for="FirstName" generates a <span> that will display any validation error message for that field. *@
         <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
 
@@ -53,6 +59,7 @@
     </div>
 </form>
 
+@* This section enables client side validation *@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

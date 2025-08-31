@@ -23,10 +23,14 @@ namespace EmployeeManagement.Services
             return _context.Departments.Find(id);
         }
 
-        public void Add(Department department)
+        public bool Add(Department department)
         {
+            // Check if department with same name exists
+            if (_context.Departments.Any(d => d.Name == department.Name))
+                return false;
             _context.Departments.Add(department);
             _context.SaveChanges();
+            return true;
         }
 
         public void Update(Department department)
@@ -35,6 +39,9 @@ namespace EmployeeManagement.Services
             if (existing != null)
             {
                 existing.Name = department.Name;
+                // Find if a department with the same name exists
+                if (_context.Departments.Any(d => d.Name == department.Name && d.Id != department.Id))
+                    throw new Exception("Department with this name already exists.");
                 _context.SaveChanges();
             }
         }

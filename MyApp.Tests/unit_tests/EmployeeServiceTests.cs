@@ -1,10 +1,7 @@
-using System;
-using System.Linq;
 using EmployeeManagement.Data;
 using EmployeeManagement.Models;
 using EmployeeManagement.Services;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace EmployeeManagement.Tests.Services.unit_tests
 {

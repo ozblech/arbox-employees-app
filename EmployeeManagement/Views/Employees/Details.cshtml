@@ -1,0 +1,16 @@
+@model Employee
+
+<h2>Employee Details</h2>
+
+@* // @Model represents the object passed from the controller action to the view. *@
+<p><strong>First Name:</strong> @Model.FirstName</p>
+<p><strong>Last Name:</strong> @Model.LastName</p>
+<p><strong>Email:</strong> @Model.Email</p>
+<p><strong>Hire Date:</strong> @Model.HireDate.ToShortDateString()</p>
+<p><strong>Salary:</strong> @Model.Salary</p>
+<p><strong>Department:</strong> @Model.Department?.Name</p>
+
+<a href="/Employees">Back to list</a>
+<br>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Edit</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-sm btn-danger">Delete</a>

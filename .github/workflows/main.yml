@@ -6,7 +6,7 @@ on:
       - '**'   # run on every push to every branch
   pull_request:
     branches:
-      - master   # triggers on PRs targeting master
+      - main   # triggers on PRs targeting master
 
 jobs:
   # -----------------------

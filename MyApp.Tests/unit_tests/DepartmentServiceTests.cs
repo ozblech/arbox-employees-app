@@ -1,10 +1,8 @@
-using Xunit;
 using Microsoft.EntityFrameworkCore;
 using EmployeeManagement.Data;
 using EmployeeManagement.Models;
 using EmployeeManagement.Services;
-using System.Collections.Generic;
-using System.Linq;
+
 
 namespace EmployeeManagement.Tests.Services.unit_tests
 {
@@ -88,6 +86,7 @@ namespace EmployeeManagement.Tests.Services.unit_tests
             service.Update(new Department { Id = 1, Name = "New Name" });
 
             var updated = context.Departments.Find(1);
+            Assert.NotNull(updated);
             Assert.Equal("New Name", updated.Name);
         }
 

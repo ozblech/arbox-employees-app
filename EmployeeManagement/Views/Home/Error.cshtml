@@ -1,6 +1,8 @@
-@model EmployeeManagement.Models.ErrorViewModel
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Home/Error";
+}
 
-<h1 class="text-danger">Error.</h1>
-<p>
-    Request ID: @Model.RequestId
-</p>
+<h1>Something went wrong!</h1>
+<p>Our team has been notified.</p>
+<a href="/">Go back to Home</a>

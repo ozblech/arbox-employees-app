@@ -17,5 +17,9 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app .
 EXPOSE 8080
+# ENV ASPNETCORE_URLS=http://+:8080 → tells Kestrel to listen on port 8080 on all interfaces (+ means any IP).
 ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["dotnet", "EmployeeManagement.dll"]
+
+# ASP.NET Core runtime automatically starts Kestrel as the web server.
+

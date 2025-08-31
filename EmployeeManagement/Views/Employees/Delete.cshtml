@@ -1,4 +1,4 @@
-@model EmployeeManagement.Models.Employee
+@model Employee
 
 @{
     ViewData["Title"] = "Delete Employee";
@@ -13,7 +13,7 @@
     <p>Department: @Model.Department</p>
 </div>
 
-<form asp-action="DeleteConfirmed" method="post">
+<form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>

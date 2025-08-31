@@ -24,7 +24,12 @@ namespace EmployeeManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                _deptService.Add(department);
+                var success = _deptService.Add(department);
+                if (!success)
+                {
+                    ModelState.AddModelError("Name", "Department with this name already exists.");
+                    return View(department);
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(department);
@@ -52,6 +57,7 @@ namespace EmployeeManagement.Controllers
             return View(department);
         }
 
+        // GET: Delete
         public IActionResult Delete(int id)
         {
             var dept = _deptService.GetById(id);
@@ -59,7 +65,10 @@ namespace EmployeeManagement.Controllers
             return View(dept);
         }
 
+        // POST: Delete
         [HttpPost, ActionName("Delete")]
+        // In C# code → it’s called DeleteConfirmed.
+        // In MVC routing / form action → it’s still considered "Delete".
         public IActionResult DeleteConfirmed(int id)
         {
             var success = _deptService.Delete(id, _employeeService.GetAll().ToList());

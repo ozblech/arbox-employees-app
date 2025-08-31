@@ -1,4 +1,3 @@
-using EmployeeManagement.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeManagement.Models
@@ -11,6 +10,6 @@ namespace EmployeeManagement.Models
         [MaxLength(50, ErrorMessage = "Department name cannot exceed 50 characters")]
         public string Name { get; set; } = string.Empty;
 
-        public ICollection<Employee>? Employees { get; set; }
+        public ICollection<Employee>? Employees { get; set; }     
     }
 }

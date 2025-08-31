@@ -4,11 +4,15 @@ namespace EmployeeManagement.Middlewares
 {
     public class GlobalExceptionMiddleware
     {
+        // _next is a delegate representing the next middleware in the pipeline. You must call it to continue processing the request.
         private readonly RequestDelegate _next;
+        private readonly IHostEnvironment _env;
 
-        public GlobalExceptionMiddleware(RequestDelegate next)
+        // ASP.NET Core automatically injects the next middleware when the pipeline runs.
+        public GlobalExceptionMiddleware(RequestDelegate next, IHostEnvironment env)
         {
             _next = next;
+            _env = env;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -16,6 +20,7 @@ namespace EmployeeManagement.Middlewares
             try
             {
                 // Continue down the pipeline
+                // If no exception → request continues normally.
                 await _next(context);
             }
             catch (Exception ex)
@@ -38,26 +43,37 @@ namespace EmployeeManagement.Middlewares
             var logEntry = new
             {
                 Timestamp = DateTime.Now,
-                Message = exception.Message,
-                StackTrace = exception.StackTrace,
-                Path = context.Request.Path
+                exception.Message,
+                exception.StackTrace,
+                context.Request.Path,
+                _env.EnvironmentName
             };
 
             var logJson = JsonSerializer.Serialize(logEntry) + Environment.NewLine;
             await File.AppendAllTextAsync(logFile, logJson);
-
             // Optional: return a friendly error page
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "text/html";
-            await context.Response.WriteAsync(@"
-                <html>
-                    <body>
-                        <h1>Something went wrong!</h1>
-                        <p>Our team has been notified.</p>
-                        <p>Exception message: " + exception.Message + @"</p>
-                        <a href='/'>Go back to Home</a>
-                    </body>
-                </html>");
+            if (_env.IsDevelopment())
+            {
+                // In dev, show detailed HTML
+                context.Response.StatusCode = 500;
+                context.Response.ContentType = "text/html";
+                await context.Response.WriteAsync(@"
+                    <html>
+                        <body>
+                            <h1>Something went wrong!</h1>
+                            <p>Our team has been notified.</p>
+                            <p>Exception message: " + exception.Message + @"</p>
+                            <a href='/'>Go back to Home</a>
+                        </body>
+                    </html>");
+            }
+            else
+            {
+                // In production, let MVC handle it instead of redirect
+                context.Response.Clear();
+                context.Response.StatusCode = 500;
+                context.Response.Redirect("/Home/Error");
+            }
         }
     }
 }

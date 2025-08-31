@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using EmployeeManagement.Models;
-
 namespace EmployeeManagement.Models
 {
     public class DashboardViewModel

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using EmployeeManagement.Models;
 using EmployeeManagement.Services;
-using System.Linq; // required for Count() and GroupBy()
 
 
 namespace EmployeeManagement.Controllers
@@ -82,6 +81,11 @@ namespace EmployeeManagement.Controllers
         public IActionResult TestError()
         {
             throw new InvalidOperationException("This is a test exception!");
+        }
+
+        public IActionResult Error()
+        {
+            return View();
         }
     }
 }
