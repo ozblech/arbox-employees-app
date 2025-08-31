@@ -34,6 +34,7 @@ namespace EmployeeManagement.Models
         public int DepartmentId { get; set; }
 
         // Navigation property
+        // EF Core uses this to load the related Department entity 
         public Department? Department { get; set; }
 
         public static ValidationResult? ValidateHireDate(DateTime hireDate, ValidationContext context)

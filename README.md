@@ -163,7 +163,7 @@ SA_USER=sa
 SA_PASSWORD=YourStrongPassw0rd
 ```
 Run:
-docker-compose up -d
+docker compose up --pull always -d
 
 -----------------------------------------------------------------------------------------------------------------
 ## Program.cs:
