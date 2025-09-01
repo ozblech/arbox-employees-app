@@ -9,10 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Adds MVC controllers + Razor Views support to the app.
 builder.Services.AddControllersWithViews();
 
+// Dependency injection setup
 // register EmployeeService as scoped 
-// Whenever something asks for IEmployeeService, create an instance of EmployeeService and give it to them."
+// Whenever something asks for IEmployeeService, create an instance of EmployeeService and give it to them.
+// but reuse the same instance within the same HTTP request.
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-// Whenever something asks for IDepartmentService, create an instance of DepartmentService and give it to them."
+// Whenever something asks for IDepartmentService, create an instance of DepartmentService and give it to them.
+// but reuse the same instance within the same HTTP request.
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 // SQL Server connection string

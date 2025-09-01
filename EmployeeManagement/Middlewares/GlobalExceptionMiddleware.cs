@@ -69,7 +69,6 @@ namespace EmployeeManagement.Middlewares
             }
             else
             {
-                // In production, let MVC handle it instead of redirect
                 context.Response.Clear();
                 context.Response.StatusCode = 500;
                 context.Response.Redirect("/Home/Error");

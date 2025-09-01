@@ -1,3 +1,174 @@
+Employee Management System – Developer
+Interview Task (2025 Edition)
+
+Overview
+Build a simplified Employee Management System that showcases clean architecture,
+layered design, basic validation, structured logging and ships as a Docker container.
+
+Tech stack & setup
+Area                                    Requirement
+
+IDE                                     Visual Studio 2022 (17.10+) or Visual Studio Code
+
+                                        
+Runtime                                 .NET 8.0 (ASP.NET Core, an
+                                        open-source web development
+                                        framework | .NET Core MVC)
+
+Web server                              Kestrel, IIS or other docker supported server
+
+
+Client UI                               ASP.NET MVC views (.cshtml, Razor).
+                                        Free to use any client framework or
+                                        native javascript
+
+Container                               Multi‐stage Dockerfile (Linux), exposes
+                                        8080
+
+Core features
+Employee CRUD
+    ● List employees in a table with paging/sorting.
+    ● Add, Edit, Delete (with confirmation).
+
+Property Rule
+
+Id                                      Auto‐increment (int)
+FirstName, LastName                     Required
+Email                                   Required, valid e‐mail format
+HireDate                                Cannot be in the future
+Salary                                  Must be > 0
+DepartmentId                            Must reference an existing Department
+
+When adding/editing, department is selected from a dropdown (can be static values
+from a file, fetch it as you would from a DB async server call).
+
+Department CRUD
+    ● List / Add / Edit / Delete (with confirmation).
+    ● Prevent deletion of a department that still has employees.
+Basic dashboard
+    ● Total employee count.
+    ● Employees grouped by department (chart or table).
+    ● Recent hires (last 30 days).
+    ● Small search box to filter employees by name or department.
+
+Validation & error handling
+    ● Apply server‐side validation.
+    ● Global exception middleware or filter:
+        ○ Log exceptions to Logs/log-YYYY-MM-DD.json or in a “Logs” table in the DB.          
+        ○ Return user‐friendly error page.
+
+Data & storage
+Use JSON file on any SQL/NoSQL DB.
+    ● If you choose JSON:
+        ○ Store files in App_Data (inside the container volume).
+        ○ Lock file access to prevent corruption.
+        ○ Handle IO exceptions gracefully.
+    ● If you choose SQL:
+        ○ Create a migration for all DB tables.
+        ○ Make sure to explain how to load your DB (DB user, run commands, etc.)
+
+Deliverable
+    ● Runs locally via Docker (preferred).
+    ● Clear README.md with:
+        ○ Prerequisites
+        ○ Build/run instructions (for running the Docker, and all other necessary
+runs/builds like DB, tests etc.)
+        ○ Architecture rationale.
+    ● Bonus: Create GitHub Actions workflow compiling & running tests on push.
+
+Submission
+    ● Provide a GitHub repository (public or invited reviewer) or a ZIP file (keep
+download size reasonable).
+    ● Ensure the repository history is clean (no IDE cruft or secrets).
+
 Create the MVC project structure
 From your project root (where your Dockerfile will live): Run:
 dotnet new mvc -n EmployeeManagement
+
+------------------------------------------------------------------------------------------------------------------------
+Step by step for submitting employee edit:
+
+
+1. Browser-side validation (before the request)
+
+jQuery Unobtrusive Validation reads the data-val-* attributes that MVC rendered from your DataAnnotations ([Required], [EmailAddress], etc.).
+
+If something is invalid, the browser blocks submit and shows inline errors in <span asp-validation-for="...">.
+
+Your custom [CustomValidation] (e.g., ValidateHireDate) does not run here—only on the server—unless you wrote a client adapter.
+
+2. Anti-forgery token
+
+The <form> Tag Helper (method="post") emits a hidden __RequestVerificationToken.
+
+If your action has [ValidateAntiForgeryToken] (or globally configured), MVC will reject the post if the token is missing/invalid.
+
+3. HTTP POST hits your app (Kestrel)
+
+Kestrel receives the POST on (say) /Employees/Edit.
+
+It enters the ASP.NET Core middleware pipeline, then MVC routing matches controller/action via your route (e.g., {controller=Employees}/{action=Edit}/{id?}).
+
+4. Model binding
+
+MVC reads the posted form fields (name="FirstName", name="LastName", etc.) and binds them to your action parameter, typically Employee employee or a dedicated EditEmployeeViewModel.
+
+Type conversion happens here (strings → DateTime, decimal, int, etc.). If conversion fails, ModelState gets errors.
+
+5. Server-side validation
+
+MVC runs DataAnnotations and any custom validation:
+
+Built-ins ([Required], [Range], [EmailAddress], [RegularExpression]) and your ValidateHireDate method.
+
+If any rule fails, MVC sets ModelState.IsValid = false.
+
+6. Your controller action runs
+
+Typical pattern:
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Edit(int id, Employee model)
+{
+    if (!ModelState.IsValid)
+        return View(model); // re-render with validation errors
+
+    await _employeeService.UpdateAsync(model); // business logic
+    return RedirectToAction(nameof(Index));     // PRG pattern
+}
+
+
+If invalid → you return View(model). MVC re-renders the form, and the validation messages appear where you have <span asp-validation-for="...">.
+
+If valid → proceed with update via your service.
+
+7. Dependency Injection in action
+
+Your controller’s constructor takes IEmployeeService. The DI container (configured with AddScoped<IEmployeeService, EmployeeService>()) injects an EmployeeService instance for this request.
+
+Same for IDepartmentService or your DbContext inside the service.
+
+8. Business logic & data access (Service → DbContext → SQL)
+
+In the service, you typically:
+
+Load the existing row (e.g., _db.Employees.FindAsync(model.Id)).
+
+Map updated values and call _db.SaveChangesAsync().
+
+EF Core:
+
+Tracks the entity, computes the diff, and emits a parameterized UPDATE (or INSERT) to SQL Server.
+
+Executes within a transaction (per SaveChanges) to keep data consistent.
+
+9. Post/Redirect/Get (PRG)
+
+After success, you usually RedirectToAction("Index") → that’s an HTTP 302 to a GET.
+
+The browser follows the redirect and fetches the Index page. This avoids resubmission on refresh and gives a clean URL.
+
+10. View rendering & response
+
+For both the error path (return View(model)) and the success path (final GET Index), MVC renders Razor (.cshtml) to HTML and sends it back to the browser.

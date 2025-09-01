@@ -121,9 +121,9 @@ namespace EmployeeManagement.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["Title"] = "Edit Employee";
             ViewData["Action"] = "Edit";
-
             // re-populate dropdown if the model is invalid
             ViewBag.DepartmentList = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
             return View("EmployeeForm", employee);
